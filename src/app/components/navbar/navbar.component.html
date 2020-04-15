@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand">
-    <img src="../../../assets/logos/tcsellesIconeWhite.svg" class="d-inline-block align-top" alt="logo tennis club selles sur cher">
+  <a class="navbar-brand" href="#" routerLink="/home">
+    <img src="/assets/logos/tcsellesIconeWhite.svg" class="d-inline-block align-top" alt="logo tennis club selles sur cher">
     TC Selles
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTCSelles" aria-controls="navbarTCSelles" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,21 +8,17 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarTCSelles">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item" [routerLinkActive]="'active'">
-          <a class="nav-link" routerLink="/home">Accueil</a>
+        <li *ngIf="authService.loggedIn()" class="nav-item" [routerLinkActive]="'active'">
+          <a *ngIf="(user$ | async) as user" class="nav-link" routerLink="/profile">
+            <img src="/assets/avatars/default-avatar.png" class="d-inline-block align-top" alt="avatar">
+            {{ user.first_name }}&nbsp;{{ user.last_name }}
+          </a>
         </li>
       </ul>
       <ul class="navbar-nav">
         <!-- Logged in -->
-        <li *ngIf="authService.loggedIn()" class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ user$.first_name |async }}&nbsp;{{ user$.last_name | async}}
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" routerLink="/profile">Mon compte</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" (click)="onLogoutClick()" href="#">Se déconnecter</a>
-          </div>
+        <li *ngIf="authService.loggedIn()" class="nav-item" [routerLinkActive]="'active'">
+          <a class="nav-link" (click)="onLogoutClick()" href="#">Se déconnecter</a>
         </li>
         <!-- Logged out -->
         <li *ngIf="!authService.loggedIn()" class="nav-item" [routerLinkActive]="'active'">

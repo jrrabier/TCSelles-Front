@@ -4,7 +4,9 @@ import { User } from '../models/user';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { environment } from 'src/environments/environment';
 import { FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { PostResponse } from '../interfaces/post-response';
+import { AuthResponse } from '../interfaces/auth-response';
 
 @Injectable({
   providedIn: 'root'
@@ -14,26 +16,27 @@ export class AuthService {
   authToken: any;
   user: User;
 
+  user$ = new BehaviorSubject<User>(JSON.parse(sessionStorage.getItem('user')));
+
   headers: HttpHeaders;
 
   constructor(
     private http: HttpClient,
     private jwtHelper: JwtHelperService
-  ) {
-  }
+  ) {}
 
   registerUser(user: User) {
     // Set headers
     this.headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-    return this.http.post<any>(environment.url + 'users/register', user, {headers: this.headers});
+    return this.http.post<PostResponse>(environment.url + 'users/register', user, {headers: this.headers});
   }
 
   authenticateUser(user: FormGroup) {
     // Set headers
     this.headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-    return this.http.post<any>(environment.url + 'users/authenticate', user, {headers: this.headers});
+    return this.http.post<AuthResponse>(environment.url + 'users/authenticate', user, {headers: this.headers});
   }
 
   getProfile() {
@@ -60,13 +63,13 @@ export class AuthService {
     return !this.jwtHelper.isTokenExpired();
   }
 
-  getLoggedInUser(): Observable<User> {
-    return sessionStorage.getItem['user'];
-  }
-
   logout() {
     this.authToken = null;
     this.user = null;
     sessionStorage.clear();
+  }
+
+  get currentUser() {
+    return this.user$.asObservable();
   }
 }

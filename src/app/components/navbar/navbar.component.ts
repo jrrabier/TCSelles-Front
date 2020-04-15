@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { User } from 'src/app/models/user';
-import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +12,7 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class NavbarComponent implements OnInit {
 
-  user$: Subscription;
+  user$: Observable<User>;
 
   constructor(
     public authService: AuthService,
@@ -21,11 +21,7 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.user$ = this.authService.getLoggedInUser()
-    .subscribe();
-
-    console.log(this.user$);
-
+    this.user$ = this.authService.currentUser;
   }
 
   onLogoutClick() {
