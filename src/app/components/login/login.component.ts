@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../../services/auth.service";
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, NgForm } from '@angular/forms';
 import { User } from 'src/app/models/user';
 
 @Component({
@@ -12,7 +12,7 @@ import { User } from 'src/app/models/user';
 })
 export class LoginComponent implements OnInit {
 
-  loginForm: FormGroup;
+  loginForm: NgForm;
   user: User;
 
   constructor(
@@ -24,7 +24,9 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  onLoginSubmit(loginForm: FormGroup) {
+  onLoginSubmit(loginForm: NgForm) {
+    console.log(loginForm.value);
+
     this.authService.authenticateUser(loginForm.value)
     .subscribe(data => {
       if (data.success) {
