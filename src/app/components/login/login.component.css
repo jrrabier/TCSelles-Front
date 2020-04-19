@@ -1,0 +1,19 @@
+div.container-fluid {
+  background-image: linear-gradient(to bottom right, #2C3E50, rgb(134, 172, 209));
+}
+
+div.row {
+  background: url('/assets/logos/tcsellesFullLogo.svg') no-repeat;
+}
+
+span.forgotPassword {
+  color: #18BC9C;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+span.forgotPassword:hover {
+  color: #0f7864;
+  text-decoration: underline;
+  cursor: pointer;
+}

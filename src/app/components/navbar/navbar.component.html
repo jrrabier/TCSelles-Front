@@ -18,7 +18,7 @@
       <ul class="navbar-nav">
         <!-- Logged in -->
         <li *ngIf="authService.loggedIn()" class="nav-item" [routerLinkActive]="'active'">
-          <a class="nav-link" (click)="onLogoutClick()" href="#">Se déconnecter</a>
+          <a class="nav-link" (click)="logout()" href="#">Se déconnecter</a>
         </li>
         <!-- Logged out -->
         <li *ngIf="!authService.loggedIn()" class="nav-item" [routerLinkActive]="'active'">

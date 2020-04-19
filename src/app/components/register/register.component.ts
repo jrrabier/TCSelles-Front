@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/models/user';
 import { ValidateService } from 'src/app/services/validate.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from "@angular/router";
-import { NgForm, NgModel } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { GlobalConstants } from "src/app/common/global-constants";
 
 @Component({
   selector: 'app-register',
@@ -13,34 +13,42 @@ import { NgForm, NgModel } from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
 
+  /* Default avatar */
+  imgSrc: string;
+
+  registerForm: FormGroup;
+
   constructor(
     private validateService: ValidateService,
     private flashMessages: FlashMessagesService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private GLOBAL: GlobalConstants,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit() {
-
+    this.imgSrc = this.GLOBAL.DEFAULT_AVATAR;
+    this.createForm();
   }
 
-  onRegisterSubmit(registerForm: NgForm) {
-    console.log(registerForm);
+  onRegisterSubmit() {
+    console.log(this.registerForm.value);
 
     // Required fields
-    if (!this.validateService.validateRegister(registerForm.value)) {
+    if (!this.validateService.validateRegister(this.registerForm.value)) {
       this.flashMessages.show('Veuillez renseigner tous les champs obligatoires !', {cssClass: 'alert-danger', timeout: 3000});
       return false;
     }
 
     // Validate email
-    if(!this.validateService.ValidateEmail(registerForm.value.email)) {
+    if(!this.validateService.ValidateEmail(this.registerForm.value.email)) {
       this.flashMessages.show('Veuillez renseigner un email valide !', {cssClass: 'alert-danger', timeout: 3000});
       return false;
     }
 
     // Register user
-    this.authService.registerUser(registerForm.value)
+    this.authService.registerUser(this.registerForm.value)
     .subscribe(data => {
       if (data.success) {
         this.flashMessages.show('Votre compte est bien crée !', {cssClass: 'alert-success', timeout: 3000});
@@ -51,6 +59,26 @@ export class RegisterComponent implements OnInit {
       }
     });
 
+  }
+
+  createForm() {
+    this.registerForm = this.fb.group({
+      last_name: ['', Validators.required],
+      first_name: ['', Validators.required],
+      avatar: [''],
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
+      rank: ['', Validators.required],
+      address: this.fb.group({
+        street: [''],
+        postal_code: [''],
+        city: [''],
+      }),
+      birth_date: ['', Validators.required],
+      mobile: [''],
+      sex: ['', Validators.required]
+    });
   }
 
 }

@@ -8,12 +8,15 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { FormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { ValidateService } from "./services/validate.service";
 import { FlashMessagesModule, FlashMessagesService } from "angular2-flash-messages";
 import { HttpClientModule } from "@angular/common/http";
 import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { AuthGuard } from './guards/auth.guard';
+import { GlobalConstants } from './common/global-constants';
+import { CompulsoryComponent } from './shared/compulsory/compulsory.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 
 export function tokenGetter() {
   return sessionStorage.getItem('id_token');
@@ -26,12 +29,14 @@ export function tokenGetter() {
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    ProfileComponent
+    ProfileComponent,
+    CompulsoryComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule,
+    ReactiveFormsModule,
     FlashMessagesModule,
     HttpClientModule,
     JwtModule.forRoot({
@@ -44,7 +49,8 @@ export function tokenGetter() {
     ValidateService,
     FlashMessagesService,
     JwtHelperService,
-    AuthGuard
+    AuthGuard,
+    GlobalConstants
   ],
   bootstrap: [AppComponent]
 })

@@ -39,6 +39,13 @@ export class AuthService {
     return this.http.post<AuthResponse>(environment.url + 'users/authenticate', user, {headers: this.headers});
   }
 
+  forgotPassword(email: FormGroup) {
+    // Set headers
+    this.headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+    return this.http.post<PostResponse>(environment.url + 'users/forgot-password', email, {headers: this.headers});
+  }
+
   getProfile() {
     this.loadToken();
     this.headers = new HttpHeaders({'Authorization': this.authToken});

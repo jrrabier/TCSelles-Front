@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { User } from 'src/app/models/user';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, AfterContentInit {
 
   user$: Observable<User>;
 
@@ -21,10 +21,15 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+  }
+
+  ngAfterContentInit(): void {
+    console.log('check');
+
     this.user$ = this.authService.currentUser;
   }
 
-  onLogoutClick() {
+  logout() {
     this.authService.logout();
     this.flashMessages.show('Vous êtes déconnecté !', {cssClass: 'alert-warning', timeout: 3000});
 
