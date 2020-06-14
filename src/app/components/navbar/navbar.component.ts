@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentInit } from '@angular/core';
+import { Component, OnInit, AfterContentInit, Input, OnChanges } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
@@ -10,9 +10,10 @@ import { User } from 'src/app/models/user';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit, AfterContentInit {
+export class NavbarComponent implements OnInit {
 
-  user$: Observable<User>;
+  /* User sent by the login-component via router-outlet */
+  @Input() user: User;
 
   constructor(
     public authService: AuthService,
@@ -21,12 +22,6 @@ export class NavbarComponent implements OnInit, AfterContentInit {
   ) {}
 
   ngOnInit() {
-  }
-
-  ngAfterContentInit(): void {
-    console.log('check');
-
-    this.user$ = this.authService.currentUser;
   }
 
   logout() {

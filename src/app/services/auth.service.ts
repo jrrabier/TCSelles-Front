@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { PostResponse } from '../interfaces/post-response';
 import { AuthResponse } from '../interfaces/auth-response';
+import { ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -22,34 +23,41 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private jwtHelper: JwtHelperService
-  ) {}
+    private jwtHelper: JwtHelperService,
+    private route: ActivatedRoute
+  ) {
+    this.headers = new HttpHeaders({'Content-Type': 'application/json'});
+  }
 
   registerUser(user: User) {
-    // Set headers
-    this.headers = new HttpHeaders({'Content-Type': 'application/json'});
 
     return this.http.post<PostResponse>(environment.url + 'users/register', user, {headers: this.headers});
   }
 
   authenticateUser(user: FormGroup) {
-    // Set headers
-    this.headers = new HttpHeaders({'Content-Type': 'application/json'});
 
     return this.http.post<AuthResponse>(environment.url + 'users/authenticate', user, {headers: this.headers});
   }
 
   forgotPassword(email: FormGroup) {
-    // Set headers
-    this.headers = new HttpHeaders({'Content-Type': 'application/json'});
 
     return this.http.post<PostResponse>(environment.url + 'users/forgot-password', email, {headers: this.headers});
   }
 
+  resetPassword(valueForm: any, token: string) {
+    const body = JSON.stringify({
+      newPsw: valueForm.new_password,
+      newPswConfirm: valueForm.confirm_new_password
+    });
+
+    this.headers = this.headers.append('Authorization', token);
+
+    return this.http.post<PostResponse>(environment.url + 'users/reset-password', body, {headers: this.headers});
+  }
+
   getProfile() {
     this.loadToken();
-    this.headers = new HttpHeaders({'Authorization': this.authToken});
-    this.headers = this.headers.append('Content-Type', 'application/json');
+    this.headers = this.headers.append('Authorization', this.authToken);
 
     return this.http.get<User>(environment.url + 'users/profile', {headers: this.headers});
   }
@@ -66,7 +74,7 @@ export class AuthService {
     this.authToken = token;
   }
 
-  loggedIn() {
+  loggedIn(): boolean {
     return !this.jwtHelper.isTokenExpired();
   }
 
@@ -78,5 +86,13 @@ export class AuthService {
 
   get currentUser() {
     return this.user$.asObservable();
+  }
+
+  /**
+   * Identify if the token is linked to the user
+   * @param token token sent by the forgot password email link
+   */
+  isResetPasswordAuth(token: string): boolean {
+    return !this.jwtHelper.isTokenExpired(token);
   }
 }

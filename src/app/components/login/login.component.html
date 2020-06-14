@@ -11,8 +11,7 @@
               <label class="required" for="email">Email</label>
               <input type="email" formControlName="email" [ngClass]="{
                 'form-control': true,
-                'is-invalid': loginForm.get('email').invalid && loginForm.get('email').touched,
-                'is-valid': loginForm.get('email').valid && loginForm.get('email').touched
+                'is-invalid': loginForm.get('email').invalid && loginForm.get('email').touched
                 }" id="email" required>
               <div *ngIf="!loginForm.errors?.email && (loginForm.touched || loginForm.dirty)" class="invalid-feedback">
                 Format de l'email invalide
@@ -36,16 +35,19 @@
               <label class="required" for="email">Email</label>
               <input type="email" formControlName="email" [ngClass]="{
                 'form-control': true,
-                'is-invalid': forgotPasswordForm.get('email').invalid && forgotPasswordForm.get('email').touched,
-                'is-valid': forgotPasswordForm.get('email').valid && forgotPasswordForm.get('email').touched
+                'is-invalid': forgotPasswordForm.get('email').invalid && forgotPasswordForm.get('email').touched
                 }" id="email" required>
-                <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+                <small class="form-text text-muted">Cet email doit correspondre à votre email de connexion.</small>
               <div *ngIf="!forgotPasswordForm.errors?.email && (forgotPasswordForm.touched || forgotPasswordForm.dirty)" class="invalid-feedback">
                 Format de l'email invalide
               </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-block" [disabled]="forgotPasswordForm.invalid">
+            <button *ngIf="!isRequesting" type="submit" class="btn btn-primary btn-block" [disabled]="forgotPasswordForm.invalid">
               Envoyer
+            </button>
+            <button *ngIf="isRequesting" type="button" class="btn btn-primary btn-block" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Envoi...
             </button>
           </form>
         </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from "../../services/auth.service";
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
@@ -13,11 +13,13 @@ import { emailValidator } from 'src/app/shared/email.directive';
 })
 export class LoginComponent implements OnInit {
 
+  isRequesting: boolean = false;
   loginForm: FormGroup;
   forgotPasswordForm: FormGroup;
+  /* User sent to the navbar via router-outlet */
   user: User;
 
-  isForgotPassword: boolean= false;
+  isForgotPassword: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -29,28 +31,40 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.createLoginForm();
     this.createForgotPasswordForm();
-    this.flashMessages.grayOut(true);
   }
 
   onLoginSubmit() {
 
     this.authService.authenticateUser(this.loginForm.value)
-    .subscribe(data => {
-      if (data.success) {
-        this.authService.storeUserData(data.token, data.user);
-        this.flashMessages.show('Vous êtes connecté. Bienvenue !', {cssClass: 'alert-success', timeout: 2000});
-          this.router.navigate(['/home']);
+    .subscribe(res => {
+      if (res.success) {
+        this.authService.storeUserData(res.token, res.user);
+        this.user = res.user;
+        this.flashMessages.show('Vous êtes connecté. Bienvenue !', {cssClass: 'alert-success', timeout: 5000});
+        this.router.navigate(['/home']);
       } else {
-        this.flashMessages.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
+        this.flashMessages.show(res.msg, {cssClass: 'alert-danger', timeout: 5000});
         this.router.navigate(['/login']);
       }
     });
   }
 
   onForgotPasswordSubmit() {
-    console.log(this.forgotPasswordForm.value);
 
-    // this.authService.forgotPassword(this.forgotPasswordForm.value)
+    this.isRequesting = true;
+
+    this.authService.forgotPassword(this.forgotPasswordForm.value)
+    .subscribe(res => {
+      if (res.success) {
+        this.flashMessages.show(res.msg, {cssClass: 'alert-success', timeout: 5000});
+        this.router.navigate(['/login']);
+        this.isRequesting = false;
+      } else {
+        this.flashMessages.show(res.msg, {cssClass: 'alert-danger', timeout: 5000});
+        this.isRequesting = false;
+        return false;
+      }
+    });
   }
 
   createLoginForm() {

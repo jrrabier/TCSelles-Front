@@ -37,13 +37,13 @@ export class RegisterComponent implements OnInit {
 
     // Required fields
     if (!this.validateService.validateRegister(this.registerForm.value)) {
-      this.flashMessages.show('Veuillez renseigner tous les champs obligatoires !', {cssClass: 'alert-danger', timeout: 3000});
+      this.flashMessages.show('Veuillez renseigner tous les champs obligatoires !', {cssClass: 'alert-danger', timeout: 2000});
       return false;
     }
 
     // Validate email
     if(!this.validateService.ValidateEmail(this.registerForm.value.email)) {
-      this.flashMessages.show('Veuillez renseigner un email valide !', {cssClass: 'alert-danger', timeout: 3000});
+      this.flashMessages.show('Veuillez renseigner un email valide !', {cssClass: 'alert-danger', timeout: 2000});
       return false;
     }
 
@@ -51,10 +51,10 @@ export class RegisterComponent implements OnInit {
     this.authService.registerUser(this.registerForm.value)
     .subscribe(data => {
       if (data.success) {
-        this.flashMessages.show('Votre compte est bien crée !', {cssClass: 'alert-success', timeout: 3000});
+        this.flashMessages.show('Votre compte est bien crée !', {cssClass: 'alert-success', timeout: 2000});
         this.router.navigate(['/login']);
       } else {
-        this.flashMessages.show('Une erreur est survenue !', {cssClass: 'alert-danger', timeout: 3000});
+        this.flashMessages.show('Une erreur est survenue !', {cssClass: 'alert-danger', timeout: 2000});
         this.router.navigate(['/register']);
       }
     });
@@ -68,7 +68,7 @@ export class RegisterComponent implements OnInit {
       avatar: [''],
       email: ['', Validators.required],
       password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
+      confirm_password: ['', Validators.required],
       rank: ['', Validators.required],
       address: this.fb.group({
         street: [''],

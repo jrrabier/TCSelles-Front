@@ -17,6 +17,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { GlobalConstants } from './common/global-constants';
 import { CompulsoryComponent } from './shared/compulsory/compulsory.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ResetPasswordGuard } from './guards/reset-password.guard';
 
 export function tokenGetter() {
   return sessionStorage.getItem('id_token');
@@ -50,6 +51,7 @@ export function tokenGetter() {
     FlashMessagesService,
     JwtHelperService,
     AuthGuard,
+    ResetPasswordGuard,
     GlobalConstants
   ],
   bootstrap: [AppComponent]
