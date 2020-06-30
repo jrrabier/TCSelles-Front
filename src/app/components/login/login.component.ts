@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user';
-import { emailValidator } from 'src/app/shared/email.directive';
+import { emailValidator } from 'src/app/shared/custom-validators.directive';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
   user: User;
 
   isForgotPassword: boolean = false;
+  showPassword: boolean = false;
 
   constructor(
     private authService: AuthService,
