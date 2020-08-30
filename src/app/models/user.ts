@@ -1,29 +1,29 @@
 export class User {
 
-  first_name: String;
-  last_name: String;
+  firstname: String;
+  lastname: String;
   email: String;
   password: String;
   avatar: String;
   rank: String;
   address: String;
-  postal_code: String;
+  postalcode: String;
   city: String;
-  birth_date: Date;
+  birthdate: Date;
   mobile: String;
   sex: String;
 
   constructor(element) {
-    this.first_name = element ? element.first_name : "";
-    this.last_name = element ? element.last_name : "";
+    this.firstname = element ? element.firstname : "";
+    this.lastname = element ? element.lastname : "";
     this.email = element ? element.email : "";
     this.password = element ? element.password : "";
     this.avatar = element.avatar == '' ? undefined : element.avatar;
     this.rank = element ? element.rank : "";
     this.address = element ? element.address : "";
-    this.postal_code = element ? element.postal_code : "";
+    this.postalcode = element ? element.postalcode : "";
     this.city = element ? element.city : "";
-    this.birth_date = element ? element.birth_date : Date();
+    this.birthdate = element ? element.birthdate : Date();
     this.mobile = element ? element.mobile : "";
     this.sex = element ? element.sex : "";
   }
