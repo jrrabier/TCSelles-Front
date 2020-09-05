@@ -1,9 +1,9 @@
 <div class="container-fluid">
   <div *ngIf="user">
     <img src="/assets/avatars/default-avatar.png" class="d-inline-block align-top" alt="avatar">
-    <h2 class="page-header"> {{ user.first_name }}&nbsp;{{ user.last_name }} </h2>
+    <h2 class="page-header"> {{ user.$firstname }}&nbsp;{{ user.$lastname }} </h2>
     <ul class="list-group">
-      <li class="list-group-item">Email: {{ user.email }} </li>
+      <li class="list-group-item">Email: {{ user.$mail }} </li>
     </ul>
   </div>
 </div>

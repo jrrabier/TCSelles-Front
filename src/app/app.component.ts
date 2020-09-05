@@ -8,7 +8,7 @@ import { User } from './models/user';
 })
 export class AppComponent implements OnInit {
 
-  user: User
+  public user: User;
 
   ngOnInit(){}
 

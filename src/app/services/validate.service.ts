@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -7,15 +8,15 @@ export class ValidateService {
 
   constructor() { }
 
-  validateRegister(user) {
+  validateRegister(user: User) {
     if (
-      user.last_name == undefined ||
-      user.first_name == undefined ||
-      user.email == undefined ||
-      user.password == undefined ||
-      user.rank == undefined ||
-      user.birth_date == undefined ||
-      user.sex == undefined
+      user.$lastname == undefined ||
+      user.$firstname == undefined ||
+      user.$mail == undefined ||
+      user.$psw == undefined ||
+      user.$lvl_id == undefined ||
+      user.$birthdate == undefined ||
+      user.$sex_id == undefined
       ) {
       return false;
     } else {
@@ -23,7 +24,7 @@ export class ValidateService {
     }
   }
 
-   ValidateEmail(mail) {
+   ValidateEmail(mail: string) {
     return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(mail));
    }
 }
