@@ -9,9 +9,8 @@ html, body {
   margin-top: 72px;
 } */
 
-label.required::after {
-  content: ' *';
-  color: #18BC9C;
+input[required] {
+  border-color: #18BC9C;
 }
 
 div.card {
@@ -37,5 +36,5 @@ div.card {
 .flash-message
 {
     z-index: 10000;
-    position: relative;
+    position: absolute;
 }

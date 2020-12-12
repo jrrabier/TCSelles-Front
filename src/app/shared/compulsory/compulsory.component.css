@@ -1,3 +1,5 @@
 .compulsory {
-  color: #18BC9C;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #18BC9C;
+  border-radius: 0.25rem;
 }
