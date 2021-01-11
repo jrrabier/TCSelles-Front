@@ -1,90 +1,83 @@
 <div class="container-fluid h-100">
-  <div class="row d-flex h-100 justify-content-center align-items-center">
-    <div class="col-lg-5 col-md-6">
-      <div class="card mb-3">
-        <h5 *ngIf="!isForgotPassword" class="card-header text-center">Connexion</h5>
-        <h5 *ngIf="isForgotPassword" class="card-header text-center">
-          <span class="mr-auto">
-            <i class="arrow-left"></i>
-          </span>
-          Mot de passe oublié
-        </h5>
-        <div class="card-body">
-          <!-- Login Form -->
-          <form *ngIf="!isForgotPassword" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
-            <div class="form-floating mb-3">
-              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-              <label for="floatingInput">Email</label>
+    <div class="row d-flex h-100 justify-content-center align-items-center">
+        <div class="col-lg-5 col-md-6">
+            <div class="card mb-3">
+                <h5 *ngIf="!isForgotPassword" class="card-header text-center">Connexion</h5>
+                <h5 *ngIf="isForgotPassword" class="card-header text-center">
+                    Mot de passe oublié
+                </h5>
+                <div class="card-body">
+                    <!-- Login Form -->
+                    <form *ngIf="!isForgotPassword" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+                        <div class="form-floating mb-3">
+                            <input type="email" formControlName="email" id="email" placeholder="name@example.com" required
+                                [ngClass]="{
+                                    'form-control': true,
+                                    'is-invalid': loginForm.get('email').invalid && loginForm.get('email').touched,
+                                    'is-valid': loginForm.get('email').valid
+                                    }">
+                            <label for="email">Email</label>
+                            <div *ngIf="!loginForm.errors?.email && (loginForm.touched || loginForm.dirty)" class="invalid-feedback">
+                              Format de l'email invalide
+                            </div>
+                        </div>
+                        <div class="input-group form-floating mb-3">
+                            <input [type]="showPassword ? 'text' : 'password'" formControlName="password" id="password"
+                            class="form-control"
+                            placeholder="Mot de passe" required>
+                            <label for="password">Mot de passe</label>
+                            <span class="input-group-text" (click)="showPassword = !showPassword">
+                                <i *ngIf="!showPassword" class="far fa-eye-slash"></i>
+                                <i *ngIf="showPassword" class="far fa-eye"></i>
+                            </span>
+                        </div>
+                        <p class="d-flex justify-content-between align-items-center">
+                          <span class="link" (click)="isForgotPassword = !isForgotPassword">
+                            Oups ! J'ai oublié mon mot de passe
+                          </span>
+                          <app-compulsory></app-compulsory>
+                        </p>
+                        <button type="submit" class="btn btn-primary btn-block" [disabled]="loginForm.invalid">
+                        Me connecter
+                        </button>
+                    </form>
+                    <!-- Forgot Password Form -->
+                    <form *ngIf="isForgotPassword" [formGroup]="forgotPasswordForm" (ngSubmit)="onForgotPasswordSubmit()">
+                        <div class="form-floating mb-3">
+                            <input type="email" formControlName="email" id="email" placeholder="name@example.com" required
+                                [ngClass]="{
+                                    'form-control': true,
+                                    'is-invalid': forgotPasswordForm.get('email').invalid && forgotPasswordForm.get('email').touched,
+                                    'is-valid': forgotPasswordForm.get('email').valid
+                                    }">
+                            <label for="email">Email</label>
+                            <div *ngIf="!forgotPasswordForm.errors?.email && (forgotPasswordForm.touched || forgotPasswordForm.dirty)" class="invalid-feedback">
+                              Format de l'email invalide
+                            </div>
+                            <small class="form-text text-muted">Cet email doit correspondre à votre email de connexion.</small>
+                        </div>
+                        <p class="d-flex justify-content-between align-items-center">
+                            <span class="link" (click)="isForgotPassword = !isForgotPassword">
+                              Se connecter
+                            </span>
+                          <app-compulsory></app-compulsory>
+                        </p>
+                        <button *ngIf="!isRequesting" type="submit" class="btn btn-primary btn-block"
+                            [disabled]="forgotPasswordForm.invalid">
+                            Envoyer
+                        </button>
+                        <button *ngIf="isRequesting" type="button" class="btn btn-primary btn-block" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Envoi...
+                        </button>
+                    </form>
+                </div>
             </div>
-            <div class="form-floating">
-              <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-              <label for="floatingPassword">Mot de passe</label>
+            <div *ngIf="!isForgotPassword" class="card">
+                <div class="d-flex card-body">
+                <span>Tu n'as pas encore de compte ?</span><a class="ml-1" routerLink="/register">Créez-en un</a>
+                </div>
             </div>
-            <div class="form-group">
-              <input type="email" formControlName="email" placeholder="Email"
-              [ngClass]="{
-                'form-control required': true,
-                'is-invalid': loginForm.get('email').invalid && loginForm.get('email').touched
-                }" id="email" required>
-              <div *ngIf="!loginForm.errors?.email && (loginForm.touched || loginForm.dirty)" class="invalid-feedback">
-                Format de l'email invalide
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <input [type]="showPassword ? 'text' : 'password'" class="form-control required" formControlName="password" placeholder="Mot de passe" id="password" aria-label="Password" aria-describedby="eye" required>
-              <div class="input-group-append" (click)="showPassword = !showPassword">
-                <span *ngIf="showPassword" class="input-group-text" id="eye">
-                  <svg class="bi bi-eye-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-                    <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-                  </svg>
-                </span>
-                <span *ngIf="!showPassword" class="input-group-text" id="eye">
-                  <svg class="bi bi-eye-slash-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10.79 12.912l-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
-                    <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708l-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829z"/>
-                    <path fill-rule="evenodd" d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z"/>
-                  </svg>
-                </span>
-              </div>
-            </div>
-            <p class="d-flex justify-content-between">
-              <span class="forgotPassword" (click)="isForgotPassword = !isForgotPassword">Oups ! J'ai oublié mon mot de passe</span>
-              <app-compulsory></app-compulsory>
-            </p>
-            <button type="submit" class="btn btn-primary btn-block" [disabled]="loginForm.invalid">
-              Me connecter
-            </button>
-          </form>
-          <!-- Forgot Password Form -->
-          <form *ngIf="isForgotPassword" [formGroup]="forgotPasswordForm" (ngSubmit)="onForgotPasswordSubmit()">
-            <div class="form-group">
-              <input type="email" formControlName="email" placeholder="Email"
-              [ngClass]="{
-                'form-control': true,
-                'is-invalid': forgotPasswordForm.get('email').invalid && forgotPasswordForm.get('email').touched
-                }" id="email" required>
-                <small class="form-text text-muted">Cet email doit correspondre à votre email de connexion.</small>
-              <div *ngIf="!forgotPasswordForm.errors?.email && (forgotPasswordForm.touched || forgotPasswordForm.dirty)" class="invalid-feedback">
-                Format de l'email invalide
-              </div>
-              <app-compulsory></app-compulsory>
-            </div>
-            <button *ngIf="!isRequesting" type="submit" class="btn btn-primary btn-block" [disabled]="forgotPasswordForm.invalid">
-              Envoyer
-            </button>
-            <button *ngIf="isRequesting" type="button" class="btn btn-primary btn-block" disabled>
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              Envoi...
-            </button>
-          </form>
         </div>
-      </div>
-      <div *ngIf="!isForgotPassword" class="card">
-        <div class="d-flex card-body">
-            <span>Tu n'as pas encore de compte ?</span><a class="ml-1" routerLink="/register">Créez-en un</a>
-        </div>
-      </div>
     </div>
-  </div>
 </div>

@@ -18,6 +18,8 @@ export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
 
+  inputFile: HTMLInputElement = new HTMLInputElement();
+
   constructor(
     private validateService: ValidateService,
     private flashMessages: FlashMessagesService,
@@ -63,22 +65,21 @@ export class RegisterComponent implements OnInit {
 
   createForm() {
     this.registerForm = this.fb.group({
-      last_name: ['', Validators.required],
-      first_name: ['', Validators.required],
+      lastname: ['', Validators.required],
+      firstname: ['', Validators.required],
       avatar: [''],
       email: ['', Validators.required],
       password: ['', Validators.required],
-      confirm_password: ['', Validators.required],
+      confirmpassword: ['', Validators.required],
       rank: ['', Validators.required],
-      address: this.fb.group({
-        street: [''],
-        postal_code: [''],
-        city: [''],
-      }),
-      birth_date: ['', Validators.required],
+      birthdate: ['', Validators.required],
       mobile: [''],
       sex: ['', Validators.required]
     });
+  }
+
+  triggerFileInput() {
+    this.inputFile
   }
 
 }

@@ -1,11 +1,11 @@
 
-span.forgotPassword {
+.link {
   color: #18BC9C;
   text-decoration: none;
   background-color: transparent;
 }
 
-span.forgotPassword:hover {
+.link:hover {
   color: #0f7864;
   text-decoration: underline;
   cursor: pointer;
