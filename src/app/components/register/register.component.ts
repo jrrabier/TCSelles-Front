@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
 
-  inputFile: HTMLInputElement = new HTMLInputElement();
+  // inputFile: HTMLInputElement = new HTMLInputElement();
 
   constructor(
     private validateService: ValidateService,
@@ -78,8 +78,8 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  triggerFileInput() {
-    this.inputFile
-  }
+  // triggerFileInput() {
+  //   this.inputFile
+  // }
 
 }

@@ -18,6 +18,9 @@ import { GlobalConstants } from './common/global-constants';
 import { CompulsoryComponent } from './shared/compulsory/compulsory.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { ResetPasswordGuard } from './guards/reset-password.guard';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
 
 export function tokenGetter() {
   return sessionStorage.getItem('id_token');
@@ -44,7 +47,8 @@ export function tokenGetter() {
       config: {
         tokenGetter: tokenGetter
       }
-    })
+    }),
+    FontAwesomeModule
   ],
   providers: [
     ValidateService,
@@ -56,4 +60,8 @@ export function tokenGetter() {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor(library: FaIconLibrary) {
+    library.addIconPacks(fas,far);
+  }
+}
