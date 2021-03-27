@@ -1,4 +1,4 @@
 export interface PostResponse {
-  success: true | false;
+  success: boolean;
   msg: string;
 }

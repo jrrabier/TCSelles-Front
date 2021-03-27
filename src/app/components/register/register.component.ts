@@ -1,20 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ValidateService } from 'src/app/services/validate.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
-import { AuthService } from 'src/app/services/auth.service';
 import { Router } from "@angular/router";
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GlobalConstants } from "src/app/common/global-constants";
+import sexesList from '../../../assets/lists/sexesList.json'
+import { ListInput } from 'src/app/interfaces/list-input';
+import { RegisterService } from 'src/app/services/register.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
+
+  getLevels$: Subscription;
 
   /* Default avatar */
   imgSrc: string;
+
+  sexesList: ListInput[];
+
+  levels: [];
 
   registerForm: FormGroup;
 
@@ -23,15 +32,30 @@ export class RegisterComponent implements OnInit {
   constructor(
     private validateService: ValidateService,
     private flashMessages: FlashMessagesService,
-    private authService: AuthService,
+    private registerService: RegisterService,
     private router: Router,
     private GLOBAL: GlobalConstants,
     private fb: FormBuilder
   ) { }
 
   ngOnInit() {
+    this.getLevels$ = this.registerService.getLevels().subscribe(
+      res => {
+        if (res.success) {
+          this.levels = res.levels;
+        } else {
+          this.flashMessages.show(res.msg, {cssClass: 'alert-danger', timeout: 2000});
+        }
+      }
+    );
+    
+    this.sexesList = sexesList;
     this.imgSrc = this.GLOBAL.DEFAULT_AVATAR;
     this.createForm();
+  }
+
+  ngOnDestroy() {
+    this.getLevels$.unsubscribe();
   }
 
   onRegisterSubmit() {
@@ -50,7 +74,7 @@ export class RegisterComponent implements OnInit {
     }
 
     // Register user
-    this.authService.registerUser(this.registerForm.value)
+    this.registerService.registerUser(this.registerForm.value)
     .subscribe(data => {
       if (data.success) {
         this.flashMessages.show('Votre compte est bien crée !', {cssClass: 'alert-success', timeout: 2000});
@@ -72,6 +96,7 @@ export class RegisterComponent implements OnInit {
       password: ['', Validators.required],
       confirmpassword: ['', Validators.required],
       rank: ['', Validators.required],
+      licence_nb: ['', Validators.required],
       birthdate: ['', Validators.required],
       mobile: [''],
       sex: ['', Validators.required]

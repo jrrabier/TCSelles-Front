@@ -1,18 +1,21 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { AuthService } from "../../services/auth.service";
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user';
 import { emailValidator } from 'src/app/shared/custom-validators.directive';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
+  authenticateUser$: Subscription;
+  forgotPassword$: Subscription;
   isRequesting: boolean = false;
   loginForm: FormGroup;
   forgotPasswordForm: FormGroup;
@@ -34,9 +37,14 @@ export class LoginComponent implements OnInit {
     this.createForgotPasswordForm();
   }
 
+  ngOnDestroy() {
+	this.authenticateUser$.unsubscribe();
+	this.forgotPassword$.unsubscribe();
+  }
+
   onLoginSubmit() {
 
-    this.authService.authenticateUser(this.loginForm.value)
+    this.authenticateUser$ = this.authService.authenticateUser(this.loginForm.value)
     .subscribe(res => {
       if (res.success) {
         this.authService.storeUserData(res.token, res.user);
@@ -54,7 +62,7 @@ export class LoginComponent implements OnInit {
 
     this.isRequesting = true;
 
-    this.authService.forgotPassword(this.forgotPasswordForm.value)
+    this.forgotPassword$ = this.authService.forgotPassword(this.forgotPasswordForm.value)
     .subscribe(res => {
       if (res.success) {
         this.flashMessages.show(res.msg, {cssClass: 'alert-success', timeout: 5000});
