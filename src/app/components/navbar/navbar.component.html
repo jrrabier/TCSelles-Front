@@ -12,9 +12,9 @@
         <div class="collapse navbar-collapse" id="navbarTCSelles">
             <ul class="navbar-nav mr-auto">
                 <li *ngIf="authService.loggedIn()" class="nav-item" [routerLinkActive]="'active'">
-                    <a *ngIf="user" class="nav-link" routerLink="/profile">
+                    <a *ngIf="sessionUser" class="nav-link" routerLink="/profile">
                         <img src="/assets/avatars/default-avatar.png" class="d-inline-block align-top" alt="avatar">
-                        {{ user.$firstname }}&nbsp;{{ user.$lastname }}
+                        {{ sessionUser.firstname }}&nbsp;{{ sessionUser.lastname }}
                     </a>
                 </li>
             </ul>

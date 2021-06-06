@@ -8,6 +8,8 @@ import sexesList from '../../../assets/lists/sexesList.json'
 import { ListInput } from 'src/app/interfaces/list-input';
 import { RegisterService } from 'src/app/services/register.service';
 import { Subscription } from 'rxjs';
+import resources from "../../../assets/resources.json";
+import { MasksService } from 'src/app/services/masks.service';
 
 @Component({
   selector: 'app-register',
@@ -24,8 +26,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
   sexesList: ListInput[];
 
   levels: [];
+  rsc: any;
+
+  mask;
 
   registerForm: FormGroup;
+  showPassword: boolean = false;
+  showconfirmPassword: boolean = false;
 
   // inputFile: HTMLInputElement = new HTMLInputElement();
 
@@ -41,6 +48,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getLevels$ = this.registerService.getLevels().subscribe(
       res => {
+          console.log(res);
+          
         if (res.success) {
           this.levels = res.levels;
         } else {
@@ -51,7 +60,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
     
     this.sexesList = sexesList;
     this.imgSrc = this.GLOBAL.DEFAULT_AVATAR;
+    this.rsc = resources;
     this.createForm();
+    this.mask = MasksService;
   }
 
   ngOnDestroy() {
@@ -63,13 +74,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     // Required fields
     if (!this.validateService.validateRegister(this.registerForm.value)) {
-      this.flashMessages.show('Veuillez renseigner tous les champs obligatoires !', {cssClass: 'alert-danger', timeout: 2000});
+      this.flashMessages.show('Veuillez renseigner tous les champs obligatoires !', {cssClass: 'alert-danger', timeout: 3000});
+      this.registerForm.invalid;
       return false;
     }
 
     // Validate email
     if(!this.validateService.ValidateEmail(this.registerForm.value.email)) {
-      this.flashMessages.show('Veuillez renseigner un email valide !', {cssClass: 'alert-danger', timeout: 2000});
+      this.flashMessages.show('Veuillez renseigner un email valide !', {cssClass: 'alert-danger', timeout: 3000});
       return false;
     }
 
@@ -77,10 +89,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.registerService.registerUser(this.registerForm.value)
     .subscribe(data => {
       if (data.success) {
-        this.flashMessages.show('Votre compte est bien crée !', {cssClass: 'alert-success', timeout: 2000});
+        this.flashMessages.show('Votre compte est bien crée !', {cssClass: 'alert-success', timeout: 3000});
         this.router.navigate(['/login']);
       } else {
-        this.flashMessages.show('Une erreur est survenue !', {cssClass: 'alert-danger', timeout: 2000});
+        this.flashMessages.show('Une erreur est survenue !', {cssClass: 'alert-danger', timeout: 3000});
         this.router.navigate(['/register']);
       }
     });
@@ -92,13 +104,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
       lastname: ['', Validators.required],
       firstname: ['', Validators.required],
       avatar: [''],
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.pattern(this.validateService.MAILREGEX)]],
       password: ['', Validators.required],
       confirmpassword: ['', Validators.required],
       rank: ['', Validators.required],
       licence_nb: ['', Validators.required],
       birthdate: ['', Validators.required],
-      mobile: [''],
+      mobile: ['', Validators.pattern(this.validateService.MOBILEREGEX)],
       sex: ['', Validators.required]
     });
   }

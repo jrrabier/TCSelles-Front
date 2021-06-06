@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { GetResponse } from '../interfaces/get-response';
+import { GetLevelsResponse } from '../interfaces/get-response';
 import { PostResponse } from '../interfaces/post-response';
 import { User } from '../models/user';
 
@@ -23,6 +23,6 @@ export class RegisterService {
   }
 
   getLevels() {
-    return this.http.get<GetResponse>(environment.url + 'users/register', {headers: this.headers});
+    return this.http.get<GetLevelsResponse>(environment.url + 'users/register', {headers: this.headers});
   }
 }

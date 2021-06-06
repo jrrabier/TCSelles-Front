@@ -1,5 +1,5 @@
-import { Component, ɵɵNgOnChangesFeature, OnChanges, OnInit } from '@angular/core';
-import { User } from './models/user';
+import { Component, OnInit } from '@angular/core';
+import { SessionUser } from './models/sessionUser';
 
 @Component({
   selector: 'app-root',
@@ -8,15 +8,15 @@ import { User } from './models/user';
 })
 export class AppComponent implements OnInit {
 
-  public user: User;
+    public sessionUser: SessionUser;
 
-  ngOnInit(){}
+    ngOnInit(){}
 
-  onActivate($event) {
-    $event.user = this.user;
-  }
+    onActivate($event) {
+        $event.user = this.sessionUser;
+    }
 
-  onDeactivate($event) {
-    this.user = $event.user;
-  }
+    onDeactivate($event) {
+        this.sessionUser = $event.user;
+    }
 }

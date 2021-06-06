@@ -16,16 +16,16 @@
                                     'is-invalid': loginForm.get('email').invalid && loginForm.get('email').touched,
                                     'is-valid': loginForm.get('email').valid
                                     }">
-                            <label for="email">Email</label>
+                            <label class="required" for="email">Email</label>
                             <div *ngIf="!loginForm.errors?.email && (loginForm.touched || loginForm.dirty)" class="invalid-feedback">
-                              Format de l'email invalide
+                                {{ rsc.invalidFeedback.email }}
                             </div>
                         </div>
                         <div class="input-group form-floating mb-3">
                             <input [type]="showPassword ? 'text' : 'password'" formControlName="password" id="password"
                             class="form-control"
                             placeholder="Mot de passe" required>
-                            <label for="password">Mot de passe</label>
+                            <label class="required" for="password">Mot de passe</label>
                             <span class="input-group-text" (click)="showPassword = !showPassword">
                                 <fa-icon *ngIf="!showPassword" icon="eye-slash"></fa-icon>
                                 <fa-icon *ngIf="showPassword" icon="eye"></fa-icon>
@@ -50,9 +50,9 @@
                                     'is-invalid': forgotPasswordForm.get('email').invalid && forgotPasswordForm.get('email').touched,
                                     'is-valid': forgotPasswordForm.get('email').valid
                                     }">
-                            <label for="email">Email</label>
+                            <label class="required" for="email">Email</label>
                             <div *ngIf="!forgotPasswordForm.errors?.email && (forgotPasswordForm.touched || forgotPasswordForm.dirty)" class="invalid-feedback">
-                              Format de l'email invalide
+                                {{ rsc.invalidFeedback.email }}
                             </div>
                             <small class="form-text text-muted">Cet email doit correspondre à votre email de connexion.</small>
                         </div>

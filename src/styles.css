@@ -9,8 +9,9 @@ html, body {
   margin-top: 72px;
 } */
 
-input[required] {
-  border-color: #18BC9C;
+label[class="required"]::after {
+  content: " *";
+  color: #18BC9C;
 }
 
 div.card {
@@ -31,4 +32,19 @@ div.card {
     width: 100%;
     overflow: hidden;
     z-index: 9999;
+}
+
+/* le label disparaît au focus dans les class input-group */
+.input-group label {
+  z-index: 10;
+}
+
+/* Pour faire disparaître l'icone d'oeil automatique */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+.hasNavbar {
+    margin-top: 75px;
 }

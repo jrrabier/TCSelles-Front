@@ -29,6 +29,7 @@
     "@fortawesome/free-regular-svg-icons": "5.15.2",
     "@fortawesome/free-solid-svg-icons": "5.15.2",
     "angular2-flash-messages": "3.0.1",
+    "angular2-text-mask": "9.0.0",
     "rxjs": "6.5.5",
     "tslib": "2.0.0",
     "zone.js": "0.10.2"

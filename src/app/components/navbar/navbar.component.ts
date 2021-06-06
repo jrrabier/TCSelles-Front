@@ -2,8 +2,7 @@ import { Component, OnInit, AfterContentInit, Input, OnChanges } from '@angular/
 import { AuthService } from 'src/app/services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { User } from 'src/app/models/user';
+import { SessionUser } from 'src/app/models/sessionUser';
 
 @Component({
   selector: 'app-navbar',
@@ -11,9 +10,7 @@ import { User } from 'src/app/models/user';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-
-  /* User sent by the login-component via router-outlet */
-  @Input() user: User;
+    @Input() sessionUser: SessionUser;
 
   constructor(
     public authService: AuthService,

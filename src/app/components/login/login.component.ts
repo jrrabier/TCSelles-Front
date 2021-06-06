@@ -1,11 +1,12 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from "../../services/auth.service";
 import { Router } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { User } from 'src/app/models/user';
 import { emailValidator } from 'src/app/shared/custom-validators.directive';
 import { Subscription } from 'rxjs';
+import resources from "../../../assets/resources.json";
+import { SessionUser } from 'src/app/models/sessionUser';
 
 @Component({
   selector: 'app-login',
@@ -14,78 +15,81 @@ import { Subscription } from 'rxjs';
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
-  authenticateUser$: Subscription;
-  forgotPassword$: Subscription;
-  isRequesting: boolean = false;
-  loginForm: FormGroup;
-  forgotPasswordForm: FormGroup;
-  /* User sent to the navbar via router-outlet */
-  user: User;
+    user: SessionUser
 
-  isForgotPassword: boolean = false;
-  showPassword: boolean = false;
+    authenticateUser$: Subscription;
+    forgotPassword$: Subscription;
+    isRequesting: boolean = false;
+    loginForm: FormGroup;
+    forgotPasswordForm: FormGroup;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private flashMessages: FlashMessagesService,
-    private fb: FormBuilder
-  ) { }
+    isForgotPassword: boolean = false;
+    showPassword: boolean = false;
 
-  ngOnInit() {
-    this.createLoginForm();
-    this.createForgotPasswordForm();
-  }
+    rsc: any;
 
-  ngOnDestroy() {
-	this.authenticateUser$.unsubscribe();
-	this.forgotPassword$.unsubscribe();
-  }
+    constructor(
+        private authService: AuthService,
+        private router: Router,
+        private flashMessages: FlashMessagesService,
+        private fb: FormBuilder
+    ) { }
 
-  onLoginSubmit() {
+    ngOnInit() {
+        this.createLoginForm();
+        this.createForgotPasswordForm();
+        this.rsc = resources;
+    }
 
-    this.authenticateUser$ = this.authService.authenticateUser(this.loginForm.value)
-    .subscribe(res => {
-      if (res.success) {
-        this.authService.storeUserData(res.token, res.user);
-        this.user = res.user;
-        this.flashMessages.show('Vous êtes connecté. Bienvenue !', {cssClass: 'alert-success', timeout: 5000});
-        this.router.navigate(['/home']);
-      } else {
-        this.flashMessages.show(res.msg, {cssClass: 'alert-danger', timeout: 5000});
-        this.router.navigate(['/login']);
-      }
-    });
-  }
+    ngOnDestroy() {
+        this.authenticateUser$?.unsubscribe();
+        this.forgotPassword$?.unsubscribe();
+    }
 
-  onForgotPasswordSubmit() {
+    onLoginSubmit() {
 
-    this.isRequesting = true;
+        this.authenticateUser$ = this.authService.authenticateUser(this.loginForm.value)
+        .subscribe(res => {
+        if (res.success) {
+            this.user = res.user;
+            this.authService.storeUserData(res.token, res.user);
+            this.flashMessages.show('Vous êtes connecté. Bienvenue !', {cssClass: 'alert-success', timeout: 5000});
+            this.router.navigate(['/home']);
+        } else {
+            this.flashMessages.show(res.msg, {cssClass: 'alert-danger', timeout: 5000});
+            this.router.navigate(['/login']);
+        }
+        });
+    }
 
-    this.forgotPassword$ = this.authService.forgotPassword(this.forgotPasswordForm.value)
-    .subscribe(res => {
-      if (res.success) {
-        this.flashMessages.show(res.msg, {cssClass: 'alert-success', timeout: 5000});
-        this.router.navigate(['/login']);
-        this.isRequesting = false;
-      } else {
-        this.flashMessages.show(res.msg, {cssClass: 'alert-danger', timeout: 5000});
-        this.isRequesting = false;
-        return false;
-      }
-    });
-  }
+    onForgotPasswordSubmit() {
 
-  createLoginForm() {
-    this.loginForm = this.fb.group({
-      email: [null, [Validators.required, emailValidator()]],
-      password: [null, Validators.required]
-    });
-  }
+        this.isRequesting = true;
 
-  createForgotPasswordForm() {
-    this.forgotPasswordForm = this.fb.group({
-      email: [null, [Validators.required, emailValidator()]],
-    });
-  }
+        this.forgotPassword$ = this.authService.forgotPassword(this.forgotPasswordForm.value)
+        .subscribe(res => {
+        if (res.success) {
+            this.flashMessages.show(res.msg, {cssClass: 'alert-success', timeout: 5000});
+            this.router.navigate(['/login']);
+            this.isRequesting = false;
+        } else {
+            this.flashMessages.show(res.msg, {cssClass: 'alert-danger', timeout: 5000});
+            this.isRequesting = false;
+            return false;
+        }
+        });
+    }
+
+    createLoginForm() {
+        this.loginForm = this.fb.group({
+        email: [null, [Validators.required, emailValidator()]],
+        password: [null, Validators.required]
+        });
+    }
+
+    createForgotPasswordForm() {
+        this.forgotPasswordForm = this.fb.group({
+        email: [null, [Validators.required, emailValidator()]],
+        });
+    }
 }

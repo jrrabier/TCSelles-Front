@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 import { PostResponse } from '../interfaces/post-response';
 import { AuthResponse } from '../interfaces/auth-response';
 import { ActivatedRoute } from '@angular/router';
+import { SessionUser } from '../models/sessionUser';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class AuthService {
   authToken: any;
   user: User;
 
-  user$ = new BehaviorSubject<User>(JSON.parse(sessionStorage.getItem('user')));
+  user$ = new BehaviorSubject<SessionUser>(JSON.parse(sessionStorage.getItem('user')));
 
   headers: HttpHeaders;
 

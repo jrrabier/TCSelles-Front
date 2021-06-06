@@ -1,8 +1,8 @@
-import { User } from '../models/user';
+import { SessionUser } from '../models/sessionUser';
 
 export interface AuthResponse {
   success: true | false;
   token: string;
-  user: User;
+  user: SessionUser;
   msg: string;
 }
